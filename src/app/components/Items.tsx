@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { CiCircleMinus, CiCirclePlus } from 'react-icons/ci';
 import PaymentInstruction from './PaymentInstruction';
 import BillNumber from './BillNumber';
+import { WithoutTaxProps } from '../types';
 
 const DEFAULT_TAX = 21;
 
@@ -15,7 +16,7 @@ type Item = {
 
 const SESSION_KEY = 'ITEMS';
 
-export default function Items() {
+export default function Items({ withOutTax }: WithoutTaxProps) {
   const [billNumber, setBillNumber] = useState<string>();
   const [items, setItems] = useState<Item[]>([{ name: '', quantity: 1, price: 0 }]);
 
@@ -71,6 +72,7 @@ export default function Items() {
   return (
     <>
       <BillNumber billNumber={billNumber} setBillNumber={setBillNumber} />
+
       <div>
         <table className="w-full table-auto border-collapse mb-8 text-sm">
           <thead className="border-b border-gray-300 text-xs">
@@ -134,18 +136,29 @@ export default function Items() {
             ))}
           </tbody>
           <tfoot className="text-sm font-semibold">
-            <tr>
-              <td className="p-2 text-right" colSpan={2}>
-                Totaalbedrag excl. btw
-              </td>
-              <td className="p-2 text-right">€{totalWithoutTax}</td>
-            </tr>
-            <tr>
-              <td className="p-2 text-right" colSpan={2}>
-                Totaalbedrag incl. 21% btw
-              </td>
-              <td className="p-2 text-right">€{totalWithTax}</td>
-            </tr>
+            {withOutTax ? (
+              <tr>
+                <td className="p-2 text-right" colSpan={2}>
+                  Totaalbedrag
+                </td>
+                <td className="p-2 text-right">€{totalWithoutTax}</td>
+              </tr>
+            ) : (
+              <>
+                <tr>
+                  <td className="p-2 text-right" colSpan={2}>
+                    Totaalbedrag excl. btw
+                  </td>
+                  <td className="p-2 text-right">€{totalWithoutTax}</td>
+                </tr>
+                <tr>
+                  <td className="p-2 text-right" colSpan={2}>
+                    Totaalbedrag incl. 21% btw
+                  </td>
+                  <td className="p-2 text-right">€{totalWithTax}</td>
+                </tr>
+              </>
+            )}
           </tfoot>
         </table>
       </div>

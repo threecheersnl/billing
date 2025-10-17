@@ -162,7 +162,10 @@ export default function Items({ withOutTax }: WithoutTaxProps) {
           </tfoot>
         </table>
       </div>
-      <PaymentInstruction billNumber={billNumber} amount={totalWithTax} />
+      <PaymentInstruction
+        billNumber={billNumber}
+        amount={withOutTax ? totalWithoutTax : totalWithTax}
+      />
     </>
   );
 }
